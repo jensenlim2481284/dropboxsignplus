@@ -1,0 +1,8 @@
+{
+    "/css/prod/dashboard/main.css": "/css/prod/dashboard/main.css",
+    "/js/prod/dashboard/main.js": "/js/prod/dashboard/main.js",
+    "/css/prod/component/table.css": "/css/prod/component/table.css",
+    "/js/prod/component/table.js": "/js/prod/component/table.js",
+    "/css/prod/component/index_preload.css": "/css/prod/component/index_preload.css",
+    "/js/prod/component/index_preload.js": "/js/prod/component/index_preload.js"
+}

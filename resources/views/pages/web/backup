@@ -1,0 +1,168 @@
+@extends("pages.pwa.layout")
+
+@section('head')
+
+<title>KKM PWA</title>
+<link href="/css/page/web/homepage.css{{ config('app.link_version') }}" type="text/css" rel="stylesheet" />
+<script src="
+https://cdn.jsdelivr.net/npm/perspective-transform@1.1.3/dist/perspective-transform.min.js
+"></script>
+
+<style>
+    #preview {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    #scanSquare {
+        position: absolute;
+        border: 2px solid red;
+        width: 60%;
+        height: 60%;
+        left: 20%;
+        top: 20%;
+        pointer-events: none;
+    }
+</style>
+@endsection
+
+@section('content')
+    <div id='camera-body'>
+
+        <div id='footer-nav'>
+
+        </div>
+
+    </div>
+
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <script src="https://cdn.rawgit.com/cozmo/jsQR/master/dist/jsQR.js"></script>
+    <script>
+        const video = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
+        const canvas = canvasElement.getContext('2d');
+
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((error) => {
+                console.error('Error accessing the camera:', error);
+            });
+
+        function captureQRCode() {
+            canvasElement.width = video.videoWidth;
+            canvasElement.height = video.videoHeight;
+            canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+            const imageDataURL = canvasElement.toDataURL('image/jpeg'); // Change format as needed
+
+            const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: 'dontInvert',
+            });
+            
+
+            if (code) {
+            // Crop the QR code image
+            // const qrCodeImage = document.createElement('canvas');
+            // console.log(code);
+            // qrCodeImage.width = code.location.topRightCorner.x - code.location.topLeftCorner.x;
+            // qrCodeImage.height = code.location.bottomLeftCorner.y - code.location.topLeftCorner.y;
+            // const ctx = qrCodeImage.getContext('2d');
+            // ctx.drawImage(video, code.location.topLeftCorner.x, code.location.topLeftCorner.y, qrCodeImage.width, qrCodeImage.height, 0, 0, qrCodeImage.width, qrCodeImage.height);
+
+            // Get the four corner points of the QR code region
+            // const { topLeftCorner, topRightCorner, bottomLeftCorner, bottomRightCorner } = code.location;
+
+            // Create a perspective transformation matrix
+            // const transformMatrix = PerspT(
+            //     [topLeftCorner.x, topLeftCorner.y, topRightCorner.x, topRightCorner.y, bottomRightCorner.x, bottomRightCorner.y, bottomLeftCorner.x, bottomLeftCorner.y],
+            //     [0, 0, code.data.length, 0, code.data.length, code.data.length, 0, code.data.length]
+            // );
+
+            // console.log(code);  
+
+            // // Apply the perspective transformation to crop the QR code region
+            // const croppedCanvas = document.createElement('canvas');
+            // const croppedContext = croppedCanvas.getContext('2d');
+            // croppedCanvas.width = code.data.length;
+            // croppedCanvas.height = code.data.length;
+            // croppedContext.transform(transformMatrix[0], transformMatrix[1], transformMatrix[2], transformMatrix[3], transformMatrix[4], transformMatrix[5]);
+            // croppedContext.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+
+            // // Convert the cropped QR code image to a data URL
+            // const croppedImageDataURL = croppedCanvas.toDataURL('image/jpeg'); // Change format as needed
+
+
+                // Get the four corner points of the QR code region
+                const { topLeftCorner, topRightCorner, bottomLeftCorner, bottomRightCorner } = code.location;
+
+                // Create a perspective transformation matrix
+           
+                const transformMatrix = PerspT(
+                    [topLeftCorner.x, topLeftCorner.y, topRightCorner.x, topRightCorner.y, bottomRightCorner.x, bottomRightCorner.y, bottomLeftCorner.x, bottomLeftCorner.y],
+                    [0, 0, 200, 0, 200, 200, 0, 200]
+                );
+
+                // Apply the perspective transformation to crop the QR code region
+                const croppedCanvas = document.createElement('canvas');
+                const croppedContext = croppedCanvas.getContext('2d');
+                croppedCanvas.width = 200;
+                croppedCanvas.height = 200;
+
+                // Create an ImageData object from the video frame
+                const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+
+                // Use the perspective-transform library to apply the transformation
+                const transformedImageData = PerspT.transform(imageData, transformMatrix, croppedCanvas);
+
+                // Draw the transformed image data onto the cropped canvas
+                croppedContext.putImageData(transformedImageData, 0, 0);
+
+                // Convert the cropped QR code image to a data URL
+                const croppedImageDataURL = croppedCanvas.toDataURL('image/jpeg'); // Change format as needed
+
+
+
+            // Display the cropped QR code image
+            document.body.appendChild(croppedCanvas);
+
+                sendQRCodeToBackend(code.data, croppedImageDataURL);
+                alert(1);
+            }
+
+            // Repeat the process in the next frame
+            requestAnimationFrame(captureQRCode);
+        }
+
+        function sendQRCodeToBackend(qrData, imageDataURL) {
+            // Replace with your backend API endpoint and logic to send the QR code data
+            const apiUrl = 'https://dashboard.kkm.test/api/receiveQR';
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ qrData, imageDataURL }),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert('QR code sent to the backend successfully.');
+                    } else {
+                        alert('Failed to send QR code to the backend.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error while sending QR code to the backend:', error);
+                    alert(404);
+                });
+        }
+
+        // Start capturing QR codes once the video stream is ready
+        video.onloadedmetadata = () => {
+            captureQRCode();
+        };
+    </script>
+@stop
