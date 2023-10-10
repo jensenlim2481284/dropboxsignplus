@@ -53,20 +53,4 @@ $app->singleton(
 */
 
 
-//ENV detection
-$host = '';
-$env = '.env';
-if (isset($_SERVER['HTTP_HOST'])) {
-    $host = $_SERVER['HTTP_HOST'];
-}
-
-if (strpos($host, 'dashboard') !== false)
-    $env = '.dashboard.env';
-
-if (strpos($host, 'pwa') !== false)
-    $env = '.pwa.env';
-
-$app->loadEnvironmentFrom($env);
-
-
 return $app;

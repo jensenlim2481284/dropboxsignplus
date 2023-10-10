@@ -1,7 +1,7 @@
 @extends("pages.dashboard.layout.empty_layout")
 
 @section('head')
-<title>KKM - Website Under Maintenance </title>
+<title>DropboxSignPlus - Website Under Maintenance </title>
 <link href="/css/page/component/error.css{{ config('app.link_version') }}" type="text/css" rel="stylesheet"/>
 @endsection
 

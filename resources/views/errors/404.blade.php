@@ -1,7 +1,7 @@
 @extends("pages.dashboard.layout.empty_layout")
 
 @section('head')
-<title>KKM - 404 Not Found</title>
+<title>DropboxSignPlus - 404 Not Found</title>
 <link href="/css/page/component/error.css{{ config('app.link_version') }}" type="text/css" rel="stylesheet"/>
 @endsection
 
