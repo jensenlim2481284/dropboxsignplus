@@ -81,8 +81,7 @@ class IndexController extends Controller
         curl_close($ch);
         $result = json_decode($result);
         $url = $result->embedded->sign_url;
-
-        $url = "https://app.hellosign.com/editor/embeddedSign?signature_id=802379436e4664f7615f21b5426f9000&token=97075e7dd557e7b8f3a9a5ee7eb505c2";
+        
         return view('pages.sign', compact('url'));
     }
 
