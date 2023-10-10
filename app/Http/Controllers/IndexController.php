@@ -12,9 +12,17 @@ class IndexController extends Controller
     # Index page 
     public function index()
     {
-        $url = 'https://app.hellosign.com/editor/embeddedSign?signature_id=4cce8363efcef0490ea3df8c64aec98f&token=5e50264525b0f63c6378a58b548ceff4';
-        return view('pages.index', compact('url'));
 
+        return view('pages.index');
+    }
+
+
+
+    # Sign page 
+    public function sign()
+    {
+
+        
         # Create embedded signature request
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://api.hellosign.com/v3/signature_request/create_embedded');
@@ -44,13 +52,16 @@ class IndexController extends Controller
 
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+            $url = null;
+            return view('pages.sign', compact('url'));
             dd("Something went wrong - Create embedded signature request");
         }
         
         curl_close($ch);
         $result = json_decode($result);
         if(isset($result->error)){
+            $url = null;
+            return view('pages.sign', compact('url'));
             dd($result->error->error_msg);
         }
         $signatureID = $result->signature_request->signatures[0]->signature_id;
@@ -63,21 +74,16 @@ class IndexController extends Controller
         curl_setopt($ch, CURLOPT_USERPWD, env('API_KEY') . ':' . '');
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+            $url = null;
+            return view('pages.sign', compact('url'));
             dd("Something went wrong - Get Embedded Sign URL ");
         }
         curl_close($ch);
         $result = json_decode($result);
         $url = $result->embedded->sign_url;
-        return view('pages.index', compact('url'));
-    }
 
-
-
-    # Sign page 
-    public function sign()
-    {
-        return view('pages.sign');
+        $url = "https://app.hellosign.com/editor/embeddedSign?signature_id=802379436e4664f7615f21b5426f9000&token=97075e7dd557e7b8f3a9a5ee7eb505c2";
+        return view('pages.sign', compact('url'));
     }
 
 

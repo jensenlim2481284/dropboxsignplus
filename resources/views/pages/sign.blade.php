@@ -175,20 +175,26 @@
                     }
                 }); 
 
-                // Open dropbox sign embed
-                const client = new window.HelloSign({
-                    clientId: "{{env('CLIENT_ID')}}"
-                    
-                });
+                @if($url !== null)
+                    // Open dropbox sign embed
+                    const client = new window.HelloSign({
+                        clientId: "{{env('CLIENT_ID')}}"
+                    });
+                    client.open("{!!$url!!}");
 
-                // client.open("{$url}");
-
-                // On signed - return to homepage
-                client.on('sign', (data) => {
-                    swal('Signed','You have successfully signed your document','success').then((value) => {
+                    // On signed - return to homepage
+                    client.on('sign', (data) => {
+                        swal('Signed','You have successfully signed your document','success').then((value) => {
+                            window.location.href ="/";
+                        });
+                    });
+                @else 
+                    swal('Signed','API have exceeded the 10 email limit, lets considering you have successfully signed your document','success').then((value) => {
                         window.location.href ="/";
                     });
-                });
+                @endif
+
+                
 
             })
 
