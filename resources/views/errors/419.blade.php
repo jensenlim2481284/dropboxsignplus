@@ -1,4 +1,4 @@
-@extends("pages.dashboard.layout.layout")
+@extends("pages.empty_layout")
 
 @section('head')
   

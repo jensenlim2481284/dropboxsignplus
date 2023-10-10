@@ -1,0 +1,41 @@
+#pdf-scroll-container{
+    text-align: center;
+}
+
+#webgazerGazeDot, #webgazerVideoContainer{
+    opacity:0 !important;
+}
+
+#signSection{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5vh;
+}
+
+
+#consentModal .modal-header{
+    border: none !important;
+}
+#consentModal .modal-footer{
+    border : none !important
+}
+#consentModal img{
+    width: 80%;
+    margin: auto;
+    margin-top: -2em;
+}
+#consentModal .modal-body{
+    text-align: center;
+    margin-bottom: 1em;
+}
+#consentModal h2{
+    font-size: 1.3em;
+    font-weight: 700;
+}
+#consentModal p{
+    font-size: 0.85em;
+    opacity: 0.8;
+    margin-bottom: 1.5em;
+}

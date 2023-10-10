@@ -1,0 +1,41 @@
+#pdf-scroll-container{
+    text-align: center;
+}
+
+#heatmapContainer{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0.3;
+    height: 100%;
+}
+#backSection{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5vh;
+}
+
+
+#timeSection{
+    background: #0061fe;
+    width: 80%;
+    margin: auto;
+    padding: 17px 30px;
+    margin-bottom: 3em;
+    padding-top: 30px;
+    color: white;
+    max-width: 700px;
+}
+
+#timeSection h3{
+    font-weight: 400;
+    font-size: 1em;
+    margin-bottom: 0px;
+}
+#timeSection p{
+    font-size: 1.7em;
+    font-weight: 700;
+}

@@ -15,11 +15,8 @@ class CreateTrackingTable extends Migration
     {
         Schema::create('tracking', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image');
-            $table->smallInteger('language')->default(0);
-            $table->smallInteger('status')->default(0);
-            $table->text('meta')->nullable();
+            $table->longText('gaze');
+            $table->longText('time');
             $table->timestamps();
         });
     }

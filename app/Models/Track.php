@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Translate extends Model
+class Track extends Model
 {
-    protected $table = 'translate';
+    protected $table = 'tracking';
     protected $guarded = ['id'];
 }
